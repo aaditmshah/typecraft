@@ -1,0 +1,96 @@
+{
+  "name": "typecraft",
+  "version": "0.1.0",
+  "description": "library for crafting types and casting type inhabitants",
+  "keywords": [
+    "cast",
+    "casting",
+    "check",
+    "checking",
+    "craft",
+    "crafting",
+    "safe",
+    "safety",
+    "type",
+    "type-cast",
+    "type-casting",
+    "type-check",
+    "type-checking",
+    "type-craft",
+    "type-crafting",
+    "type-safe",
+    "type-safety",
+    "typecast",
+    "typecasting",
+    "typecheck",
+    "typechecking",
+    "typecraft",
+    "typecrafting",
+    "types",
+    "typesafe",
+    "typesafety",
+    "typescript"
+  ],
+  "homepage": "https://github.com/aaditmshah/typecraft",
+  "bugs": "https://github.com/aaditmshah/typecraft/issues",
+  "license": "MIT",
+  "author": "Aadit M Shah <aaditmshah@aadit.codes> (https://aadit.codes/)",
+  "funding": [
+    {
+      "type": "individual",
+      "url": "https://aadit.codes/sponsor"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/aaditmshah"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/aaditmshah"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/aaditmshah"
+    },
+    {
+      "type": "buymeacoffee",
+      "url": "https://www.buymeacoffee.com/aaditmshah"
+    }
+  ],
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "repository": "github:aaditmshah/typecraft",
+  "scripts": {
+    "lint": "eslint .",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write .",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "build": "parcel build",
+    "watch": "parcel watch",
+    "prepare": "is-ci || husky install"
+  },
+  "devDependencies": {
+    "@parcel/packager-ts": "2.7.0",
+    "@parcel/transformer-typescript-types": "2.7.0",
+    "@typescript-eslint/eslint-plugin": "5.35.1",
+    "@typescript-eslint/parser": "5.35.1",
+    "eslint": "8.22.0",
+    "eslint-config-ivory": "0.1.3",
+    "eslint-import-resolver-typescript": "3.5.0",
+    "eslint-plugin-eslint-comments": "3.2.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jest": "26.8.7",
+    "eslint-plugin-promise": "6.0.1",
+    "eslint-plugin-unicorn": "43.0.2",
+    "husky": "8.0.1",
+    "is-ci": "3.0.1",
+    "jest": "28.1.3",
+    "lint-staged": "13.0.3",
+    "parcel": "2.7.0",
+    "prettier": "2.7.1",
+    "typescript": "4.7.4"
+  }
+}
