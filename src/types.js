@@ -1,3 +1,5 @@
+import { recursive } from "./recursive.js";
+
 const unknown = { tag: "unknown" };
 const never = { tag: "never" };
 const string = { tag: "string" };
@@ -32,7 +34,7 @@ const fix = (combinators) => {
   return Object.fromEntries(
     Object.keys(combinators).map((key) => [
       key,
-      { tag: "recursive", symbol: propTypes[key].symbol, context }
+      recursive(context, new Set(), propTypes[key]).type
     ])
   );
 };
