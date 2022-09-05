@@ -1,5 +1,5 @@
-const recursive = (context, environment, type) => {
-  switch (type.tag) {
+const recursive = (context, environment, inputType) => {
+  switch (inputType.tag) {
     case "unknown":
     case "never":
     case "string":
@@ -7,110 +7,76 @@ const recursive = (context, environment, type) => {
     case "bigint":
     case "boolean":
     case "symbol":
-      return { type, free: new Set() };
+      return { type: inputType, free: new Set() };
     case "array": {
-      const result = recursive(context, environment, type.type);
-      return { type: { tag: "array", type: result.type }, free: result.free };
+      const { type, free } = recursive(context, environment, inputType.type);
+      return { type: { tag: "array", type }, free };
     }
     case "tuple": {
-      const types = [];
-      const free = new Set();
-      for (const itemType of type.types) {
-        const result = recursive(context, environment, itemType);
-        types.push(result.type);
-        for (const symbol of result.free) free.add(symbol);
-      }
+      const { types, free } = concat(context, environment, inputType.types);
       return { type: { tag: "tuple", types }, free };
     }
     case "record": {
-      const result = recursive(context, environment, type.type);
-      return { type: { tag: "record", type: result.type }, free: result.free };
+      const { type, free } = recursive(context, environment, inputType.type);
+      return { type: { tag: "record", type }, free };
     }
     case "object": {
-      const propTypes = {};
-      const free = new Set();
-      for (const [key, propertyType] of Object.entries(type.propTypes)) {
-        const result = recursive(context, environment, propertyType);
-        propTypes[key] = result.type;
-        for (const symbol of result.free) free.add(symbol);
-      }
-      return { type: { tag: "object", propTypes }, free };
+      const { types, free } = concat(context, environment, inputType.propTypes);
+      return { type: { tag: "object", propTypes: types }, free };
     }
     case "nullable": {
-      const result = recursive(context, environment, type.type);
-      return {
-        type: { tag: "nullable", type: result.type },
-        free: result.free
-      };
+      const { type, free } = recursive(context, environment, inputType.type);
+      return { type: { tag: "nullable", type }, free };
     }
     case "optional": {
-      const result = recursive(context, environment, type.type);
-      return {
-        type: { tag: "optional", type: result.type },
-        free: result.free
-      };
+      const { type, free } = recursive(context, environment, inputType.type);
+      return { type: { tag: "optional", type }, free };
     }
     case "enumeration":
-      return { type, free: new Set() };
+      return { type: inputType, free: new Set() };
     case "union": {
-      const types = [];
-      const free = new Set();
-      for (const unionType of type.types) {
-        const result = recursive(context, environment, unionType);
-        types.push(result.type);
-        for (const symbol of result.free) free.add(symbol);
-      }
+      const { types, free } = concat(context, environment, inputType.types);
       return { type: { tag: "union", types }, free };
     }
     case "intersection": {
-      const types = [];
-      const free = new Set();
-      for (const intersectionType of type.types) {
-        const result = recursive(context, environment, intersectionType);
-        types.push(result.type);
-        for (const symbol of result.free) free.add(symbol);
-      }
+      const { types, free } = concat(context, environment, inputType.types);
       return { type: { tag: "intersection", types }, free };
     }
     case "pure":
-      return { type, free: new Set() };
+      return { type: inputType, free: new Set() };
     case "map": {
-      const result = recursive(context, environment, type.type);
-      return {
-        type: { tag: "map", morphism: type.morphism, type: result.type },
-        free: result.free
-      };
+      const { type, free } = recursive(context, environment, inputType.type);
+      return { type: { tag: "map", morphism: inputType.morphism, type }, free };
     }
     case "reference": {
-      const { symbol } = type;
-      if (!Object.hasOwn(context, symbol) || environment.has(symbol)) {
-        return { type, free: new Set([symbol]) };
-      }
-      const result = recursive(
-        context,
-        new Set([...environment, symbol]),
-        context[symbol]
-      );
-      const { free } = result;
-      if (!free.has(symbol)) return result;
-      free.delete(symbol);
-      return { type: { tag: "recursive", symbol, type: result.type }, free };
+      const { symbol } = inputType;
+      if (!Object.hasOwn(context, symbol) || environment.has(symbol))
+        return { type: inputType, free: new Set([symbol]) };
+      const extended = new Set([...environment, symbol]);
+      const { type, free } = recursive(context, extended, context[symbol]);
+      if (!free.has(symbol)) return { type, free };
+      const set = new Set([...free].filter((name) => name !== symbol));
+      return { type: { tag: "recursive", symbol, type }, free: set };
     }
     case "recursive": {
-      const { symbol } = type;
-      const result = recursive(
-        context,
-        new Set([...environment, symbol]),
-        type.type
-      );
-      return {
-        type: { tag: "recursive", symbol, type: result.type },
-        free: result.free
-      };
+      const { symbol } = inputType;
+      const extended = new Set([...environment, symbol]);
+      const { type, free } = recursive(context, extended, inputType.type);
+      return { type: { tag: "recursive", symbol, type }, free };
     }
     default:
-      throw new TypeError(`unknown type ${type}`);
+      throw new TypeError(`unknown type ${inputType}`);
   }
 };
+
+function concat(context, environment, inputTypes) {
+  const set = new Set();
+  const types = inputTypes.map((inputType) => {
+    const { type, free } = recursive(context, environment, inputType);
+    for (const symbol of free) set.add(symbol);
+    return type;
+  });
+  return { types, free: set };
+}
 
 export { recursive };
