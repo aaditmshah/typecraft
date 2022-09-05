@@ -60,8 +60,15 @@ function recursive(context, environment, inputType) {
       return { type: record(type), free };
     }
     case "object": {
-      const { types, free } = concat(context, environment, inputType.propTypes);
-      return { type: object(types), free };
+      const set = new Set();
+      const propTypes = Object.fromEntries(
+        Object.entries(inputType.propTypes).map(([key, propertyType]) => {
+          const { type, free } = recursive(context, environment, propertyType);
+          for (const reference of free) set.add(reference);
+          return [key, type];
+        })
+      );
+      return { type: object(propTypes), free: set };
     }
     case "nullable": {
       const { type, free } = recursive(context, environment, inputType.type);
