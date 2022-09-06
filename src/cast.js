@@ -59,7 +59,7 @@ const castType = (context, inputType, actual) => {
       const items = actual.map((item) =>
         castType(context, inputType.type, item)
       );
-      return items.some((item) => item.status === "failure")
+      return items.some((item) => item.status !== "success")
         ? { status: "failure", expected: "array", items, actual }
         : {
             status: "success",
@@ -74,7 +74,7 @@ const castType = (context, inputType, actual) => {
       const items = types.map((type, index) =>
         castType(context, type, actual[index])
       );
-      return items.some((item) => item.status === "failure")
+      return items.some((item) => item.status !== "success")
         ? { status: "failure", expected: "tuple", length, items, actual }
         : {
             status: "success",
@@ -88,7 +88,7 @@ const castType = (context, inputType, actual) => {
         key,
         castType(context, inputType.type, value)
       ]);
-      return properties.some(([_, result]) => result.status === "failure")
+      return properties.some(([_, result]) => result.status !== "success")
         ? {
             status: "failure",
             expected: "record",
@@ -115,7 +115,7 @@ const castType = (context, inputType, actual) => {
           )
         ]
       );
-      return properties.some(([_, result]) => result.status === "failure")
+      return properties.some(([_, result]) => result.status !== "success")
         ? {
             status: "failure",
             expected: "object",
@@ -153,7 +153,7 @@ const castType = (context, inputType, actual) => {
       const results = inputType.types.map((type) =>
         castType(context, type, actual)
       );
-      return results.some((result) => result.status === "failure")
+      return results.some((result) => result.status !== "success")
         ? { status: "failure", expected: "intersection", results }
         : {
             status: "success",
