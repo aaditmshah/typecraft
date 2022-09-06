@@ -1,11 +1,14 @@
-declare type Primitive =
-  | string
-  | number
-  | bigint
-  | boolean
-  | symbol
-  | null
-  | undefined;
+declare interface Primitives {
+  string: string;
+  number: number;
+  bigint: bigint;
+  boolean: boolean;
+  symbol: symbol;
+  null: null;
+  undefined: undefined;
+}
+
+declare type Primitive = Primitives[keyof Primitives];
 
 declare abstract class Type<A> {
   private readonly covariant: A;
@@ -23,6 +26,9 @@ declare type Combinators<A> = {
 
 declare const unknown: Type<unknown>;
 declare const never: Type<never>;
+declare const primitive: <A extends keyof Primitives>(
+  type: A
+) => Type<Primitives[A]>;
 declare const string: Type<string>;
 declare const number: Type<number>;
 declare const bigint: Type<bigint>;
@@ -47,7 +53,7 @@ declare const pure: <A>(value: A) => Type<A>;
 declare const map: <A, B>(morphism: (a: A) => B, type: Type<A>) => Type<B>;
 declare const fix: <A extends {}>(combinators: Combinators<A>) => Types<A>;
 
-export type { Primitive, Type, Types, Typedef, Combinators };
+export type { Primitives, Primitive, Type, Types, Typedef, Combinators };
 export {
   unknown,
   never,
@@ -56,6 +62,7 @@ export {
   bigint,
   boolean,
   symbol,
+  primitive,
   array,
   tuple,
   record,

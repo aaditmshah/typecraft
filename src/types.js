@@ -3,19 +3,23 @@ const remove = (set, item) => new Set([...set].filter((data) => data !== item));
 
 const unknown = { tag: "unknown" };
 const never = { tag: "never" };
-const string = { tag: "string" };
-const number = { tag: "number" };
-const bigint = { tag: "bigint" };
-const boolean = { tag: "boolean" };
-const symbol = { tag: "symbol" };
+const primitive = (type) => ({ tag: "primitive", type });
+const string = primitive("string");
+const number = primitive("number");
+const bigint = primitive("bigint");
+const boolean = primitive("boolean");
+const symbol = primitive("symbol");
 const array = (type) => ({ tag: "array", type });
 const tuple = (...types) => ({ tag: "tuple", types });
 const record = (type) => ({ tag: "record", type });
 const object = (propTypes) => ({ tag: "object", propTypes });
-const nullable = (type) => ({ tag: "nullable", type });
-const optional = (type) => ({ tag: "optional", type });
-const enumeration = (...values) => ({ tag: "enumeration", values });
+const enumeration = (...values) => ({
+  tag: "enumeration",
+  values: new Set(values)
+});
 const union = (...types) => ({ tag: "union", types });
+const nullable = (type) => union(type, primitive("null"));
+const optional = (type) => union(type, primitive("undefined"));
 const intersection = (...types) => ({ tag: "intersection", types });
 const pure = (value) => ({ tag: "pure", value });
 const map = (morphism, type) => ({ tag: "map", morphism, type });
@@ -43,11 +47,9 @@ function spin(context, environment, inputType) {
   switch (inputType.tag) {
     case "unknown":
     case "never":
-    case "string":
-    case "number":
-    case "bigint":
-    case "boolean":
-    case "symbol":
+    case "primitive":
+    case "enumeration":
+    case "pure":
       return { type: inputType, free: new Set() };
     case "array": {
       const { type, free } = spin(context, environment, inputType.type);
@@ -72,16 +74,6 @@ function spin(context, environment, inputType) {
       );
       return { type: object(propTypes), free: set };
     }
-    case "nullable": {
-      const { type, free } = spin(context, environment, inputType.type);
-      return { type: nullable(type), free };
-    }
-    case "optional": {
-      const { type, free } = spin(context, environment, inputType.type);
-      return { type: optional(type), free };
-    }
-    case "enumeration":
-      return { type: inputType, free: new Set() };
     case "union": {
       const { types, free } = spinAll(context, environment, inputType.types);
       return { type: union(types), free };
@@ -90,8 +82,6 @@ function spin(context, environment, inputType) {
       const { types, free } = spinAll(context, environment, inputType.types);
       return { type: intersection(types), free };
     }
-    case "pure":
-      return { type: inputType, free: new Set() };
     case "map": {
       const { type, free } = spin(context, environment, inputType.type);
       return { type: map(inputType.morphism, type), free };
@@ -133,6 +123,7 @@ export {
   bigint,
   boolean,
   symbol,
+  primitive,
   array,
   tuple,
   record,
