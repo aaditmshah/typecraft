@@ -6,7 +6,7 @@ const nondet = (arrays) => {
 };
 
 const nondetObject = (arrays) => {
-  if (arrays.length === 0) return [[]];
+  if (arrays.length === 0) return [{}];
   const [[key, xs], ...xss] = arrays;
   const objects = nondetObject(xss);
   return xs.flatMap((x) => objects.map((object) => ({ [key]: x, ...object })));
