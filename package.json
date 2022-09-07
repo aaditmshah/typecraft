@@ -58,6 +58,14 @@
     }
   ],
   "source": "src/index.ts",
+  "targets": {
+    "main": {
+      "optimize": true
+    },
+    "module": {
+      "optimize": true
+    }
+  },
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
