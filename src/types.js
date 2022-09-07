@@ -57,7 +57,7 @@ function spin(context, environment, inputType) {
     }
     case "tuple": {
       const { types, free } = spinAll(context, environment, inputType.types);
-      return { type: tuple(types), free };
+      return { type: tuple(...types), free };
     }
     case "record": {
       const { type, free } = spin(context, environment, inputType.type);
@@ -76,11 +76,11 @@ function spin(context, environment, inputType) {
     }
     case "union": {
       const { types, free } = spinAll(context, environment, inputType.types);
-      return { type: union(types), free };
+      return { type: union(...types), free };
     }
     case "intersection": {
       const { types, free } = spinAll(context, environment, inputType.types);
-      return { type: intersection(types), free };
+      return { type: intersection(...types), free };
     }
     case "map": {
       const { type, free } = spin(context, environment, inputType.type);
