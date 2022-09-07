@@ -100,6 +100,7 @@ function spin(context, environment, inputType) {
         ? { type: recursive(name, type), free: remove(free, name) }
         : result;
     }
+    /* istanbul ignore next */
     default:
       throw new TypeError(`unknown type ${inputType}`);
   }

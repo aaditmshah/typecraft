@@ -49,6 +49,7 @@ const castType = (context, inputType, actual) => {
           return typeof actual === "undefined"
             ? { status: "success", values: [actual] }
             : { status: "failure", expected: "undefined", actual };
+        /* istanbul ignore next */
         default:
           throw new TypeError(`invalid primitive ${type}`);
       }
@@ -176,12 +177,13 @@ const castType = (context, inputType, actual) => {
       const { symbol } = inputType;
       return Object.hasOwn(context, symbol)
         ? castType(context, context[symbol], actual)
-        : { status: "unbound", symbol };
+        : /* istanbul ignore next */ { status: "unbound", symbol };
     }
     case "recursive": {
       const { symbol, type } = inputType;
       return castType({ ...context, [symbol]: type }, type, actual);
     }
+    /* istanbul ignore next */
     default:
       throw new TypeError(`unknown type ${inputType}`);
   }
