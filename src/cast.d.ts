@@ -42,8 +42,7 @@ declare type Cast<A> =
       actual: unknown;
     }
   | { status: "failure"; expected: "union"; variants: Cast<never>[] }
-  | { status: "failure"; expected: "intersection"; results: Cast<unknown>[] }
-  | { status: "unbound"; symbol: symbol };
+  | { status: "failure"; expected: "intersection"; results: Cast<unknown>[] };
 
 declare const cast: <A>(type: Type<A>) => (input: unknown) => Cast<A>;
 

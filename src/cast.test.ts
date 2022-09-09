@@ -1,5 +1,6 @@
 import fc from "fast-check";
 import { cast } from "./cast";
+import type { Type } from "./types";
 import {
   unknown,
   never,
@@ -870,41 +871,21 @@ describe("cast", () => {
       tail: List<A>;
     }
 
-    interface FooBar {
-      foo?: [number, number][] | undefined;
-      bar: Record<PropertyKey, unknown>;
-    }
+    const list = <A>(type: Type<A>) =>
+      fix<List<A>>((tail) => nullable(object({ head: type, tail })));
 
-    const foobar = map(
-      ([{ foo }, { bar }]) => ({ foo, bar }),
-      intersection(
-        object({ foo: optional(array(tuple(number, pure(0)))) }),
-        object({
-          bar: record(union(unknown, never, enumeration(true, false)))
-        })
-      )
-    );
-
-    const { list } = fix<{ list: List<FooBar>; cons: Cons<FooBar> }>({
-      list: ({ cons }) => nullable(cons),
-      cons: ({ list }) => object({ head: foobar, tail: list })
-    });
-
-    const castArray = cast(list);
+    const castNums = cast(list(number));
 
     const cons = <A>(head: A, tail: List<A>): Cons<A> => ({ head, tail });
 
-    const x: FooBar = { foo: [[0, 0]], bar: { x: "x" } };
-    const y: FooBar = { foo: undefined, bar: { y: "y" } };
-
     // eslint-disable-next-line unicorn/no-null -- empty list
-    const goodList = cons(x, cons(y, null));
+    const nums = cons(1, cons(2, cons(3, null)));
 
     it("should successfully cast recursive data structures", () => {
       expect.assertions(1);
-      expect(castArray(goodList)).toStrictEqual({
+      expect(castNums(nums)).toStrictEqual({
         status: "success",
-        values: [goodList]
+        values: [nums]
       });
     });
   });
