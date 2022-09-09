@@ -66,6 +66,9 @@
       "optimize": true
     }
   },
+  "files": [
+    "dist/*"
+  ],
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/index.d.ts",
