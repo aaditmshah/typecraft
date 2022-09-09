@@ -68,7 +68,7 @@
   },
   "main": "dist/main.js",
   "module": "dist/module.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
   "repository": "github:aaditmshah/typecraft",
   "scripts": {
     "lint": "eslint .",
@@ -76,8 +76,7 @@
     "prettier:write": "prettier --write .",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "parcel build",
-    "watch": "parcel watch",
+    "build": "parcel build && cp src/*.d.ts dist",
     "prepare": "is-ci || husky install"
   },
   "devDependencies": {
