@@ -1,7 +1,7 @@
 import type { Primitive, Type } from "./types";
 
 declare type Cast<A> =
-  | { status: "success"; values: A[] }
+  | { status: "success"; value: A; values: A[] }
   | { status: "failure"; expected: "never"; actual: unknown }
   | { status: "failure"; expected: "string"; actual: unknown }
   | { status: "failure"; expected: "number"; actual: unknown }

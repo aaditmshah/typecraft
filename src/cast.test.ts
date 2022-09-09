@@ -34,7 +34,8 @@ describe("cast", () => {
         fc.property(fc.anything(), (input) => {
           expect(castUnknown(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -67,7 +68,8 @@ describe("cast", () => {
         fc.property(fc.string(), (input) => {
           expect(castString(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -99,7 +101,8 @@ describe("cast", () => {
         fc.property(fc.double(), (input) => {
           expect(castNumber(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -131,7 +134,8 @@ describe("cast", () => {
         fc.property(fc.bigInt(), (input) => {
           expect(castBigInt(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -163,7 +167,8 @@ describe("cast", () => {
         fc.property(fc.boolean(), (input) => {
           expect(castBoolean(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -196,7 +201,8 @@ describe("cast", () => {
           const input = Symbol(description);
           expect(castSymbol(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -228,7 +234,8 @@ describe("cast", () => {
       const input = null;
       expect(castNull(input)).toStrictEqual({
         status: "success",
-        values: [input]
+        value: input,
+        values: []
       });
     });
 
@@ -257,7 +264,8 @@ describe("cast", () => {
       const input = undefined;
       expect(castUndefined(input)).toStrictEqual({
         status: "success",
-        values: [input]
+        value: input,
+        values: []
       });
     });
 
@@ -287,7 +295,8 @@ describe("cast", () => {
         fc.property(fc.array(fc.double()), (input) => {
           expect(castNums(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -345,7 +354,8 @@ describe("cast", () => {
           (input) => {
             expect(castTriple(input)).toStrictEqual({
               status: "success",
-              values: [input]
+              value: input,
+              values: []
             });
           }
         )
@@ -420,7 +430,8 @@ describe("cast", () => {
         fc.property(fc.dictionary(fc.string(), fc.double()), (input) => {
           expect(castNumericRecord(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -483,7 +494,8 @@ describe("cast", () => {
           (input) => {
             expect(castObject(input)).toStrictEqual({
               status: "success",
-              values: [input]
+              value: input,
+              values: []
             });
           }
         )
@@ -548,7 +560,8 @@ describe("cast", () => {
         fc.property(fc.double(), (input) => {
           expect(castNullableNumber(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -560,7 +573,8 @@ describe("cast", () => {
       const input = null;
       expect(castNullableNumber(input)).toStrictEqual({
         status: "success",
-        values: [input]
+        value: input,
+        values: []
       });
     });
 
@@ -596,7 +610,8 @@ describe("cast", () => {
         fc.property(fc.double(), (input) => {
           expect(castOptionalNumber(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -607,7 +622,8 @@ describe("cast", () => {
       const input = undefined;
       expect(castOptionalNumber(input)).toStrictEqual({
         status: "success",
-        values: [input]
+        value: input,
+        values: []
       });
     });
 
@@ -643,7 +659,8 @@ describe("cast", () => {
         fc.property(fc.constantFrom("male", "female"), (input) => {
           expect(castGender(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -684,7 +701,8 @@ describe("cast", () => {
             const { foo, bar } = input;
             expect(castFooBar(input)).toStrictEqual({
               status: "success",
-              values: [{ foo }, { bar }]
+              value: { foo },
+              values: [{ bar }]
             });
           }
         )
@@ -697,7 +715,8 @@ describe("cast", () => {
         fc.property(fc.record({ foo: fc.string() }), (input) => {
           expect(castFooBar(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -709,7 +728,8 @@ describe("cast", () => {
         fc.property(fc.record({ bar: fc.double() }), (input) => {
           expect(castFooBar(input)).toStrictEqual({
             status: "success",
-            values: [input]
+            value: input,
+            values: []
           });
         })
       );
@@ -768,7 +788,8 @@ describe("cast", () => {
             const { foo, bar } = input;
             expect(castFooBar(input)).toStrictEqual({
               status: "success",
-              values: [[{ foo }, { bar }]]
+              value: [{ foo }, { bar }],
+              values: []
             });
           }
         )
@@ -824,7 +845,8 @@ describe("cast", () => {
         fc.property(fc.anything(), (input) => {
           expect(castAnswer(input)).toStrictEqual({
             status: "success",
-            values: [answer]
+            value: answer,
+            values: []
           });
         })
       );
@@ -840,7 +862,8 @@ describe("cast", () => {
         fc.property(fc.string(), (input) => {
           expect(castLength(input)).toStrictEqual({
             status: "success",
-            values: [input.length]
+            value: input.length,
+            values: []
           });
         })
       );
@@ -887,7 +910,8 @@ describe("cast", () => {
           (input) => {
             expect(castNums(input)).toStrictEqual({
               status: "success",
-              values: [input]
+              value: input,
+              values: []
             });
           }
         )

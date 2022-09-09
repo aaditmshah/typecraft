@@ -15,7 +15,7 @@ const nondetObject = (arrays) => {
 const cast = (inputType) => {
   switch (inputType.tag) {
     case "unknown":
-      return (actual) => ({ status: "success", values: [actual] });
+      return (actual) => ({ status: "success", value: actual, values: [] });
     case "never":
       return (actual) => ({ status: "failure", expected: "never", actual });
     case "primitive": {
@@ -24,37 +24,37 @@ const cast = (inputType) => {
         case "string":
           return (actual) =>
             typeof actual === "string"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "string", actual };
         case "number":
           return (actual) =>
             typeof actual === "number"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "number", actual };
         case "bigint":
           return (actual) =>
             typeof actual === "bigint"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "bigint", actual };
         case "boolean":
           return (actual) =>
             typeof actual === "boolean"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "boolean", actual };
         case "symbol":
           return (actual) =>
             typeof actual === "symbol"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "symbol", actual };
         case "null":
           return (actual) =>
             actual === null
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "null", actual };
         case "undefined":
           return (actual) =>
             typeof actual === "undefined"
-              ? { status: "success", values: [actual] }
+              ? { status: "success", value: actual, values: [] }
               : { status: "failure", expected: "undefined", actual };
         /* istanbul ignore next */
         default:
@@ -67,12 +67,12 @@ const cast = (inputType) => {
         if (!Array.isArray(actual))
           return { status: "failure", expected: "array", actual };
         const items = actual.map((item) => castType(item));
-        return items.some((item) => item.status !== "success")
-          ? { status: "failure", expected: "array", items, actual }
-          : {
-              status: "success",
-              values: nondet(items.map((item) => item.values))
-            };
+        if (items.some((item) => item.status !== "success"))
+          return { status: "failure", expected: "array", items, actual };
+        const [value, ...values] = nondet(
+          items.map((item) => [item.value, ...item.values])
+        );
+        return { status: "success", value, values };
       };
     }
     case "tuple": {
@@ -85,12 +85,19 @@ const cast = (inputType) => {
         const items = castTypes.map((castType, index) =>
           castType(actual[index])
         );
-        return items.some((item) => item.status !== "success")
-          ? { status: "failure", expected: "tuple", length, items, actual }
-          : {
-              status: "success",
-              values: nondet(items.map((item) => item.values))
-            };
+        if (items.some((item) => item.status !== "success")) {
+          return {
+            status: "failure",
+            expected: "tuple",
+            length,
+            items,
+            actual
+          };
+        }
+        const [value, ...values] = nondet(
+          items.map((item) => [item.value, ...item.values])
+        );
+        return { status: "success", value, values };
       };
     }
     case "record": {
@@ -102,19 +109,21 @@ const cast = (inputType) => {
           key,
           castType(value)
         ]);
-        return properties.some(([_, result]) => result.status !== "success")
-          ? {
-              status: "failure",
-              expected: "record",
-              properties: Object.fromEntries(properties),
-              actual
-            }
-          : {
-              status: "success",
-              values: nondetObject(
-                properties.map(([key, result]) => [key, result.values])
-              )
-            };
+        if (properties.some(([_, result]) => result.status !== "success")) {
+          return {
+            status: "failure",
+            expected: "record",
+            properties: Object.fromEntries(properties),
+            actual
+          };
+        }
+        const [value, ...values] = nondetObject(
+          properties.map(([key, result]) => [
+            key,
+            [result.value, ...result.values]
+          ])
+        );
+        return { status: "success", value, values };
       };
     }
     case "object": {
@@ -128,26 +137,28 @@ const cast = (inputType) => {
           key,
           castType(Object.hasOwn(actual, key) ? actual[key] : undefined)
         ]);
-        return properties.some(([_, result]) => result.status !== "success")
-          ? {
-              status: "failure",
-              expected: "object",
-              properties: Object.fromEntries(properties),
-              actual
-            }
-          : {
-              status: "success",
-              values: nondetObject(
-                properties.map(([key, result]) => [key, result.values])
-              )
-            };
+        if (properties.some(([_, result]) => result.status !== "success")) {
+          return {
+            status: "failure",
+            expected: "object",
+            properties: Object.fromEntries(properties),
+            actual
+          };
+        }
+        const [value, ...values] = nondetObject(
+          properties.map(([key, result]) => [
+            key,
+            [result.value, ...result.values]
+          ])
+        );
+        return { status: "success", value, values };
       };
     }
     case "enumeration": {
       const { values } = inputType;
       return (actual) =>
         values.has(actual)
-          ? { status: "success", values: [actual] }
+          ? { status: "success", value: actual, values: [] }
           : { status: "failure", expected: "enumeration", values, actual };
     }
     case "union": {
@@ -157,29 +168,30 @@ const cast = (inputType) => {
         const successes = variants.filter(
           (variant) => variant.status === "success"
         );
-        return successes.length > 0
-          ? {
-              status: "success",
-              values: successes.flatMap((variant) => variant.values)
-            }
-          : { status: "failure", expected: "union", variants };
+        if (successes.length === 0)
+          return { status: "failure", expected: "union", variants };
+        const [value, ...values] = successes.flatMap((variant) => [
+          variant.value,
+          ...variant.values
+        ]);
+        return { status: "success", value, values };
       };
     }
     case "intersection": {
       const castTypes = inputType.types.map((type) => cast(type));
       return (actual) => {
         const results = castTypes.map((castType) => castType(actual));
-        return results.some((result) => result.status !== "success")
-          ? { status: "failure", expected: "intersection", results }
-          : {
-              status: "success",
-              values: nondet(results.map((result) => result.values))
-            };
+        if (results.some((result) => result.status !== "success"))
+          return { status: "failure", expected: "intersection", results };
+        const [value, ...values] = nondet(
+          results.map((result) => [result.value, ...result.values])
+        );
+        return { status: "success", value, values };
       };
     }
     case "pure": {
       const { value } = inputType;
-      return (_actual) => ({ status: "success", values: [value] });
+      return (_actual) => ({ status: "success", value, values: [] });
     }
     case "map": {
       const { morphism, type } = inputType;
@@ -189,7 +201,10 @@ const cast = (inputType) => {
         return result.status === "success"
           ? {
               status: "success",
-              values: result.values.map((value) => morphism(value))
+              value: morphism(result.value),
+              values: result.values.map(
+                /* istanbul ignore next */ (value) => morphism(value)
+              )
             }
           : result;
       };
