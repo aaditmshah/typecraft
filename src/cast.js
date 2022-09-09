@@ -195,8 +195,8 @@ const cast = (inputType) => {
       };
     }
     case "lazy": {
-      const { getType } = inputType;
-      return (actual) => cast(getType())(actual);
+      const type = inputType.getType();
+      return (actual) => cast(type)(actual);
     }
     /* istanbul ignore next */
     default:

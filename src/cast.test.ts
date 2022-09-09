@@ -876,17 +876,22 @@ describe("cast", () => {
 
     const castNums = cast(list(number));
 
-    const cons = <A>(head: A, tail: List<A>): Cons<A> => ({ head, tail });
-
-    // eslint-disable-next-line unicorn/no-null -- empty list
-    const nums = cons(1, cons(2, cons(3, null)));
-
     it("should successfully cast recursive data structures", () => {
-      expect.assertions(1);
-      expect(castNums(nums)).toStrictEqual({
-        status: "success",
-        values: [nums]
-      });
+      expect.assertions(100);
+      fc.assert(
+        fc.property(
+          fc.letrec<{ list: List<number>; cons: Cons<number> }>((tie) => ({
+            list: fc.option(tie("cons")),
+            cons: fc.record({ head: fc.double(), tail: tie("list") })
+          })).list,
+          (input) => {
+            expect(castNums(input)).toStrictEqual({
+              status: "success",
+              values: [input]
+            });
+          }
+        )
+      );
     });
   });
 });
