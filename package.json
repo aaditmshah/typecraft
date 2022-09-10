@@ -1,6 +1,6 @@
 {
   "name": "typecraft",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "library for crafting types and casting type inhabitants",
   "keywords": [
     "cast",
