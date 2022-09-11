@@ -11,7 +11,8 @@
     "sourceType": "module"
   },
   "env": {
-    "es2018": true
+    "es2018": true,
+    "commonjs": true
   },
   "rules": {
     "import/no-unused-modules": "off"
