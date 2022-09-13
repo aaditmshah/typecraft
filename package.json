@@ -89,6 +89,8 @@
     "@commitlint/cli": "17.1.2",
     "@parcel/packager-ts": "2.7.0",
     "@parcel/transformer-typescript-types": "2.7.0",
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/git": "10.0.1",
     "@types/jest": "28.1.8",
     "@typescript-eslint/eslint-plugin": "5.35.1",
     "@typescript-eslint/parser": "5.35.1",
