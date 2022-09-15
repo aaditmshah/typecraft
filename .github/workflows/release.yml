@@ -5,6 +5,7 @@ on:
       - Continuous Integration
     branches:
       - main
+      - alpha
     types:
       - completed
 jobs:
