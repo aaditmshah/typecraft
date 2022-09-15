@@ -1,35 +1,8 @@
 name: Continuous Integration
-on:
-  push:
-    branches:
-      - main
-      - alpha
-  pull_request:
-    branches:
-      - main
-      - alpha
+on: pull_request
 jobs:
-  lint:
-    name: ESLint check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Lint codebase
-        run: yarn lint
-
-  prettier:
-    name: Prettier check
+  integrate:
+    name: Integrate changes
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -47,59 +20,14 @@ jobs:
       - name: Check formatting
         run: yarn prettier:check
 
-  typecheck:
-    name: Type check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Lint codebase
+        run: yarn lint
 
       - name: Check types
         run: yarn typecheck
 
-  test:
-    name: Unit test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Test codebase
         run: yarn test
-
-  build:
-    name: Library build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Build library
         run: yarn build
