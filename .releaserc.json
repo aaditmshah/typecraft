@@ -16,6 +16,12 @@
   "plugins": [
     "semantic-release-gitmoji",
     "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "yarn prettier:write"
+      }
+    ],
     "@semantic-release/npm",
     "@semantic-release/git",
     "@semantic-release/github"
