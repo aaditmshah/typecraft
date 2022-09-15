@@ -1,21 +1,20 @@
-name: Release
+name: Continuous Deployment
 on:
-  workflow_run:
-    workflows:
-      - Continuous Integration
+  push:
     branches:
       - main
       - alpha
-    types:
-      - completed
 jobs:
-  release:
-    name: Release on NPM
+  deploy:
+    name: Deploy changes
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+          persist-credentials: false
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -26,11 +25,23 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Check formatting
+        run: yarn prettier:check
+
+      - name: Lint codebase
+        run: yarn lint
+
+      - name: Check types
+        run: yarn typecheck
+
+      - name: Test codebase
+        run: yarn test
+
       - name: Build library
         run: yarn build
 
-      - name: Semantic release on NPM
+      - name: Release on NPM
         run: yarn semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
