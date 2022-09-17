@@ -169,7 +169,7 @@ const cast = (inputType) => {
           (variant) => variant.status === "success"
         );
         if (successes.length === 0)
-          return { status: "failure", expected: "union", variants };
+          return { status: "failure", expected: "union", variants, actual };
         const [value, ...values] = successes.flatMap((variant) => [
           variant.value,
           ...variant.values

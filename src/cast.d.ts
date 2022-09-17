@@ -41,7 +41,12 @@ declare type Cast<A> =
       values: Set<Primitive>;
       actual: unknown;
     }
-  | { status: "failure"; expected: "union"; variants: Cast<never>[] }
+  | {
+      status: "failure";
+      expected: "union";
+      variants: Cast<never>[];
+      actual: unknown;
+    }
   | { status: "failure"; expected: "intersection"; results: Cast<unknown>[] };
 
 declare const cast: <A>(type: Type<A>) => (input: unknown) => Cast<A>;
