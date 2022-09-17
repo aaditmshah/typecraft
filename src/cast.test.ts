@@ -593,7 +593,8 @@ describe("cast", () => {
               variants: [
                 { status: "failure", expected: "number", actual: input },
                 { status: "failure", expected: "null", actual: input }
-              ]
+              ],
+              actual: input
             });
           }
         )
@@ -642,7 +643,8 @@ describe("cast", () => {
               variants: [
                 { status: "failure", expected: "number", actual: input },
                 { status: "failure", expected: "undefined", actual: input }
-              ]
+              ],
+              actual: input
             });
           }
         )
@@ -767,7 +769,8 @@ describe("cast", () => {
                 },
                 actual: input
               }
-            ]
+            ],
+            actual: input
           });
         })
       );
