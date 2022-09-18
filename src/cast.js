@@ -1,3 +1,5 @@
+import { apply } from "./pipe";
+
 const nondet = (arrays) => {
   if (arrays.length === 0) return [[]];
   const [xs, ...xss] = arrays;
@@ -13,9 +15,15 @@ const nondetObject = (arrays) => {
 };
 
 const cast = (inputType) => {
-  switch (inputType.tag) {
+  const { tag, composition } = inputType;
+  const transform = apply(composition);
+  switch (tag) {
     case "unknown":
-      return (actual) => ({ status: "success", value: actual, values: [] });
+      return (actual) => ({
+        status: "success",
+        value: transform(actual),
+        values: []
+      });
     case "never":
       return (actual) => ({ status: "failure", expected: "never", actual });
     case "primitive": {
@@ -24,37 +32,37 @@ const cast = (inputType) => {
         case "string":
           return (actual) =>
             typeof actual === "string"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "string", actual };
         case "number":
           return (actual) =>
             typeof actual === "number"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "number", actual };
         case "bigint":
           return (actual) =>
             typeof actual === "bigint"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "bigint", actual };
         case "boolean":
           return (actual) =>
             typeof actual === "boolean"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "boolean", actual };
         case "symbol":
           return (actual) =>
             typeof actual === "symbol"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "symbol", actual };
         case "null":
           return (actual) =>
             actual === null
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "null", actual };
         case "undefined":
           return (actual) =>
             typeof actual === "undefined"
-              ? { status: "success", value: actual, values: [] }
+              ? { status: "success", value: transform(actual), values: [] }
               : { status: "failure", expected: "undefined", actual };
         /* istanbul ignore next */
         default:
@@ -71,7 +79,7 @@ const cast = (inputType) => {
           return { status: "failure", expected: "array", items, actual };
         const [value, ...values] = nondet(
           items.map((item) => [item.value, ...item.values])
-        );
+        ).map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
@@ -96,7 +104,7 @@ const cast = (inputType) => {
         }
         const [value, ...values] = nondet(
           items.map((item) => [item.value, ...item.values])
-        );
+        ).map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
@@ -122,7 +130,7 @@ const cast = (inputType) => {
             key,
             [result.value, ...result.values]
           ])
-        );
+        ).map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
@@ -150,7 +158,7 @@ const cast = (inputType) => {
             key,
             [result.value, ...result.values]
           ])
-        );
+        ).map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
@@ -158,7 +166,7 @@ const cast = (inputType) => {
       const { values } = inputType;
       return (actual) =>
         values.has(actual)
-          ? { status: "success", value: actual, values: [] }
+          ? { status: "success", value: transform(actual), values: [] }
           : { status: "failure", expected: "enumeration", values, actual };
     }
     case "union": {
@@ -170,10 +178,9 @@ const cast = (inputType) => {
         );
         if (successes.length === 0)
           return { status: "failure", expected: "union", variants, actual };
-        const [value, ...values] = successes.flatMap((variant) => [
-          variant.value,
-          ...variant.values
-        ]);
+        const [value, ...values] = successes
+          .flatMap((variant) => [variant.value, ...variant.values])
+          .map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
@@ -185,29 +192,17 @@ const cast = (inputType) => {
           return { status: "failure", expected: "intersection", results };
         const [value, ...values] = nondet(
           results.map((result) => [result.value, ...result.values])
-        );
+        ).map((value) => transform(value));
         return { status: "success", value, values };
       };
     }
     case "pure": {
       const { value } = inputType;
-      return (_actual) => ({ status: "success", value, values: [] });
-    }
-    case "map": {
-      const { morphism, type } = inputType;
-      const castType = cast(type);
-      return (actual) => {
-        const result = castType(actual);
-        return result.status === "success"
-          ? {
-              status: "success",
-              value: morphism(result.value),
-              values: result.values.map(
-                /* istanbul ignore next */ (value) => morphism(value)
-              )
-            }
-          : result;
-      };
+      return (_actual) => ({
+        status: "success",
+        value: transform(value),
+        values: []
+      });
     }
     case "lazy": {
       const type = inputType.getType();
