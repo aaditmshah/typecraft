@@ -1,3 +1,9 @@
+# [v1.2.0-alpha.1](https://github.com/aaditmshah/typecraft/compare/v1.1.1-alpha.1...v1.2.0-alpha.1) (2022-09-18)
+
+## ✨ New Features
+
+- [`483dd40`](https://github.com/aaditmshah/typecraft/commit/483dd40) Create a Yoneda embedding for type schemas.
+
 # [v1.1.1-alpha.1](https://github.com/aaditmshah/typecraft/compare/v1.1.0...v1.1.1-alpha.1) (2022-09-17)
 
 ## 🐛 Bug Fixes
