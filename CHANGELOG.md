@@ -1,3 +1,9 @@
+# [v1.2.0-alpha.2](https://github.com/aaditmshah/typecraft/compare/v1.2.0-alpha.1...v1.2.0-alpha.2) (2022-09-19)
+
+## 🐛 Bug Fixes
+
+- [`2e7e9ea`](https://github.com/aaditmshah/typecraft/commit/2e7e9ea) Transform the result of a lazy type.
+
 # [v1.2.0-alpha.1](https://github.com/aaditmshah/typecraft/compare/v1.1.1-alpha.1...v1.2.0-alpha.1) (2022-09-18)
 
 ## ✨ New Features
