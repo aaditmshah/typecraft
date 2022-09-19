@@ -920,5 +920,40 @@ describe("cast", () => {
         )
       );
     });
+
+    it("should fail to cast invalid recursive data structures", () => {
+      expect.assertions(100);
+      fc.assert(
+        fc.property(fc.double(), (head) => {
+          const tail = undefined;
+          const input = { head, tail };
+          expect(castNums(input)).toStrictEqual({
+            status: "failure",
+            expected: "union",
+            variants: [
+              {
+                status: "failure",
+                expected: "object",
+                properties: {
+                  head: { status: "success", value: head, values: [] },
+                  tail: {
+                    status: "failure",
+                    expected: "union",
+                    variants: [
+                      { status: "failure", expected: "object", actual: tail },
+                      { status: "failure", expected: "null", actual: tail }
+                    ],
+                    actual: tail
+                  }
+                },
+                actual: input
+              },
+              { status: "failure", expected: "null", actual: input }
+            ],
+            actual: input
+          });
+        })
+      );
+    });
   });
 });
