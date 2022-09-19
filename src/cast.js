@@ -206,7 +206,16 @@ const cast = (inputType) => {
     }
     case "lazy": {
       const type = inputType.getType();
-      return (actual) => cast(type)(actual);
+      return (actual) => {
+        const result = cast(type)(actual);
+        if (result.status !== "success") return result;
+        const { status, value, values } = result;
+        return {
+          status,
+          value: transform(value),
+          values: values.map(/* istanbul ignore next */ (v) => transform(v))
+        };
+      };
     }
     /* istanbul ignore next */
     default:
