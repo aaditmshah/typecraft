@@ -17,17 +17,5 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Check formatting
-        run: yarn prettier:check
-
-      - name: Lint codebase
-        run: yarn lint
-
-      - name: Check types
-        run: yarn typecheck
-
-      - name: Test codebase
-        run: yarn test
-
-      - name: Build library
-        run: yarn build
+      - name: Run checks
+        run: yarn ci
