@@ -80,6 +80,7 @@
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",
     "build": "parcel build --no-source-maps && cp src/*.d.ts dist",
+    "ci": "concurrently --kill-others-on-fail 'yarn prettier:check' 'yarn lint' 'yarn typecheck' 'yarn test' 'yarn build'",
     "prepare": "is-ci || husky install"
   },
   "devDependencies": {
