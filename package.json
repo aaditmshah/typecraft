@@ -79,7 +79,7 @@
     "prettier:write": "prettier --write .",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "parcel build && cp src/*.d.ts dist",
+    "build": "parcel build --no-source-maps && cp src/*.d.ts dist",
     "prepare": "is-ci || husky install"
   },
   "devDependencies": {
