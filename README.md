@@ -22,7 +22,7 @@ interface Person {
 const person: Type<Person> = object({
   name: string,
   age: number,
-  alive: optional(boolean)
+  alive: optional(boolean),
 });
 
 /**
@@ -63,12 +63,12 @@ const person: Type<Person> = map(
   ({ name, age, alive = true }) => ({
     name,
     age,
-    alive
+    alive,
   }),
   object({
     name: string,
     age: number,
-    alive: optional(boolean)
+    alive: optional(boolean),
   })
 );
 ```
@@ -340,7 +340,7 @@ import {
   boolean,
   symbol,
   primitive,
-  union
+  union,
 } from "typecraft";
 
 const simple: Type<Primitive> = union(

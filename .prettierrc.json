@@ -1,1 +1,3 @@
-"eslint-config-ivory/.prettierrc.json"
+{
+  "quoteProps": "consistent"
+}
