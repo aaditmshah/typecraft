@@ -1,8 +1,8 @@
 # Typecraft
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/aaditmshah/typecraft/Continuous%20Deployment?logo=github)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/aaditmshah/typecraft/Continuous%20Deployment?logo=github)](https://github.com/aaditmshah/typecraft/actions/workflows/continuous-deployment.yml)
 [![GitHub license](https://img.shields.io/github/license/aaditmshah/typecraft)](https://github.com/aaditmshah/typecraft/blob/main/LICENSE)
-![npm](https://img.shields.io/npm/v/typecraft?logo=npm)
+[![npm](https://img.shields.io/npm/v/typecraft?logo=npm)](https://www.npmjs.com/package/typecraft)
 [![semantic-release: gitmoji](https://img.shields.io/badge/semantic--release-gitmoji-E10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Faaditmshah%2Ftypecraft)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Faaditmshah%2Ftypecraft)
 
