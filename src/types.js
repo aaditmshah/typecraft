@@ -14,12 +14,12 @@ const record = (type) => ({ tag: "record", type, composition: nil() });
 const object = (propTypes) => ({
   tag: "object",
   propTypes,
-  composition: nil()
+  composition: nil(),
 });
 const enumeration = (...values) => ({
   tag: "enumeration",
   values: new Set(values),
-  composition: nil()
+  composition: nil(),
 });
 const union = (...types) => ({ tag: "union", types, composition: nil() });
 const nullable = (type) => union(type, primitive("null"));
@@ -27,18 +27,18 @@ const optional = (type) => union(type, primitive("undefined"));
 const intersection = (...types) => ({
   tag: "intersection",
   types,
-  composition: nil()
+  composition: nil(),
 });
 const pure = (value) => ({ tag: "pure", value, composition: nil() });
 const map = (morphism, type) => ({
   ...type,
-  composition: cons(morphism, type.composition)
+  composition: cons(morphism, type.composition),
 });
 const fix = (combinator) => {
   const type = combinator({
     tag: "lazy",
     getType: () => type,
-    composition: nil()
+    composition: nil(),
   });
   return type;
 };
@@ -63,5 +63,5 @@ export {
   intersection,
   pure,
   map,
-  fix
+  fix,
 };

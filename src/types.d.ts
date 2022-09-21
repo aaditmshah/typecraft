@@ -70,5 +70,5 @@ export {
   intersection,
   pure,
   map,
-  fix
+  fix,
 };

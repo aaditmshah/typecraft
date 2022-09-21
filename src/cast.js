@@ -22,7 +22,7 @@ const cast = (inputType) => {
       return (actual) => ({
         status: "success",
         value: transform(actual),
-        values: []
+        values: [],
       });
     case "never":
       return (actual) => ({ status: "failure", expected: "never", actual });
@@ -99,7 +99,7 @@ const cast = (inputType) => {
             expected: "tuple",
             length,
             items,
-            actual
+            actual,
           };
         }
         const [value, ...values] = nondet(
@@ -115,20 +115,20 @@ const cast = (inputType) => {
           return { status: "failure", expected: "record", actual };
         const properties = Object.entries(actual).map(([key, value]) => [
           key,
-          castType(value)
+          castType(value),
         ]);
         if (properties.some(([_, result]) => result.status !== "success")) {
           return {
             status: "failure",
             expected: "record",
             properties: Object.fromEntries(properties),
-            actual
+            actual,
           };
         }
         const [value, ...values] = nondetObject(
           properties.map(([key, result]) => [
             key,
-            [result.value, ...result.values]
+            [result.value, ...result.values],
           ])
         ).map((value) => transform(value));
         return { status: "success", value, values };
@@ -143,20 +143,20 @@ const cast = (inputType) => {
           return { status: "failure", expected: "object", actual };
         const properties = castPropertyTypes.map(([key, castType]) => [
           key,
-          castType(Object.hasOwn(actual, key) ? actual[key] : undefined)
+          castType(Object.hasOwn(actual, key) ? actual[key] : undefined),
         ]);
         if (properties.some(([_, result]) => result.status !== "success")) {
           return {
             status: "failure",
             expected: "object",
             properties: Object.fromEntries(properties),
-            actual
+            actual,
           };
         }
         const [value, ...values] = nondetObject(
           properties.map(([key, result]) => [
             key,
-            [result.value, ...result.values]
+            [result.value, ...result.values],
           ])
         ).map((value) => transform(value));
         return { status: "success", value, values };
@@ -201,7 +201,7 @@ const cast = (inputType) => {
       return (_actual) => ({
         status: "success",
         value: transform(value),
-        values: []
+        values: [],
       });
     }
     case "lazy": {
@@ -213,7 +213,7 @@ const cast = (inputType) => {
         return {
           status,
           value: transform(value),
-          values: values.map(/* istanbul ignore next */ (v) => transform(v))
+          values: values.map(/* istanbul ignore next */ (v) => transform(v)),
         };
       };
     }

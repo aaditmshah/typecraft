@@ -21,7 +21,7 @@ import {
   intersection,
   pure,
   map,
-  fix
+  fix,
 } from "./types";
 
 describe("cast", () => {
@@ -35,7 +35,7 @@ describe("cast", () => {
           expect(castUnknown(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -52,7 +52,7 @@ describe("cast", () => {
           expect(castNever(input)).toStrictEqual({
             status: "failure",
             expected: "never",
-            actual: input
+            actual: input,
           });
         })
       );
@@ -69,7 +69,7 @@ describe("cast", () => {
           expect(castString(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -84,7 +84,7 @@ describe("cast", () => {
             expect(castString(input)).toStrictEqual({
               status: "failure",
               expected: "string",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -102,7 +102,7 @@ describe("cast", () => {
           expect(castNumber(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -117,7 +117,7 @@ describe("cast", () => {
             expect(castNumber(input)).toStrictEqual({
               status: "failure",
               expected: "number",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -135,7 +135,7 @@ describe("cast", () => {
           expect(castBigInt(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -150,7 +150,7 @@ describe("cast", () => {
             expect(castBigInt(input)).toStrictEqual({
               status: "failure",
               expected: "bigint",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -168,7 +168,7 @@ describe("cast", () => {
           expect(castBoolean(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -183,7 +183,7 @@ describe("cast", () => {
             expect(castBoolean(input)).toStrictEqual({
               status: "failure",
               expected: "boolean",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -202,7 +202,7 @@ describe("cast", () => {
           expect(castSymbol(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -217,7 +217,7 @@ describe("cast", () => {
             expect(castSymbol(input)).toStrictEqual({
               status: "failure",
               expected: "symbol",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -235,7 +235,7 @@ describe("cast", () => {
       expect(castNull(input)).toStrictEqual({
         status: "success",
         value: input,
-        values: []
+        values: [],
       });
     });
 
@@ -248,7 +248,7 @@ describe("cast", () => {
             expect(castNull(input)).toStrictEqual({
               status: "failure",
               expected: "null",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -265,7 +265,7 @@ describe("cast", () => {
       expect(castUndefined(input)).toStrictEqual({
         status: "success",
         value: input,
-        values: []
+        values: [],
       });
     });
 
@@ -278,7 +278,7 @@ describe("cast", () => {
             expect(castUndefined(input)).toStrictEqual({
               status: "failure",
               expected: "undefined",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -296,7 +296,7 @@ describe("cast", () => {
           expect(castNums(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -317,9 +317,9 @@ describe("cast", () => {
               items: input.map((actual) => ({
                 status: "failure",
                 expected: "number",
-                actual
+                actual,
               })),
-              actual: input
+              actual: input,
             });
           }
         )
@@ -335,7 +335,7 @@ describe("cast", () => {
             expect(castNums(input)).toStrictEqual({
               status: "failure",
               expected: "array",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -355,7 +355,7 @@ describe("cast", () => {
             expect(castTriple(input)).toStrictEqual({
               status: "success",
               value: input,
-              values: []
+              values: [],
             });
           }
         )
@@ -380,9 +380,9 @@ describe("cast", () => {
               items: [
                 { status: "failure", expected: "string", actual: first },
                 { status: "failure", expected: "number", actual: second },
-                { status: "failure", expected: "boolean", actual: third }
+                { status: "failure", expected: "boolean", actual: third },
               ],
-              actual: input
+              actual: input,
             });
           }
         )
@@ -397,7 +397,7 @@ describe("cast", () => {
             status: "failure",
             expected: "tuple",
             length: 3,
-            actual: input
+            actual: input,
           });
         })
       );
@@ -413,7 +413,7 @@ describe("cast", () => {
               status: "failure",
               expected: "tuple",
               length: 3,
-              actual: input
+              actual: input,
             });
           }
         )
@@ -431,7 +431,7 @@ describe("cast", () => {
           expect(castNumericRecord(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -453,10 +453,10 @@ describe("cast", () => {
               properties: Object.fromEntries(
                 Object.entries(input).map(([key, actual]) => [
                   key,
-                  { status: "failure", expected: "number", actual }
+                  { status: "failure", expected: "number", actual },
                 ])
               ),
-              actual: input
+              actual: input,
             });
           }
         )
@@ -469,7 +469,7 @@ describe("cast", () => {
         expect(castNumericRecord(input)).toStrictEqual({
           status: "failure",
           expected: "record",
-          actual: input
+          actual: input,
         });
       };
       fc.assert(
@@ -495,7 +495,7 @@ describe("cast", () => {
             expect(castObject(input)).toStrictEqual({
               status: "success",
               value: input,
-              values: []
+              values: [],
             });
           }
         )
@@ -508,7 +508,7 @@ describe("cast", () => {
         fc.property(
           fc.record({
             foo: fc.anything().filter((input) => typeof input !== "string"),
-            bar: fc.anything().filter((input) => typeof input !== "number")
+            bar: fc.anything().filter((input) => typeof input !== "number"),
           }),
           (input) => {
             const { foo, bar } = input;
@@ -521,10 +521,10 @@ describe("cast", () => {
                 baz: {
                   status: "failure",
                   expected: "boolean",
-                  actual: undefined
-                }
+                  actual: undefined,
+                },
               },
-              actual: input
+              actual: input,
             });
           }
         )
@@ -537,7 +537,7 @@ describe("cast", () => {
         expect(castObject(input)).toStrictEqual({
           status: "failure",
           expected: "object",
-          actual: input
+          actual: input,
         });
       };
       fc.assert(
@@ -561,7 +561,7 @@ describe("cast", () => {
           expect(castNullableNumber(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -574,7 +574,7 @@ describe("cast", () => {
       expect(castNullableNumber(input)).toStrictEqual({
         status: "success",
         value: input,
-        values: []
+        values: [],
       });
     });
 
@@ -592,9 +592,9 @@ describe("cast", () => {
               expected: "union",
               variants: [
                 { status: "failure", expected: "number", actual: input },
-                { status: "failure", expected: "null", actual: input }
+                { status: "failure", expected: "null", actual: input },
               ],
-              actual: input
+              actual: input,
             });
           }
         )
@@ -612,7 +612,7 @@ describe("cast", () => {
           expect(castOptionalNumber(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -624,7 +624,7 @@ describe("cast", () => {
       expect(castOptionalNumber(input)).toStrictEqual({
         status: "success",
         value: input,
-        values: []
+        values: [],
       });
     });
 
@@ -642,9 +642,9 @@ describe("cast", () => {
               expected: "union",
               variants: [
                 { status: "failure", expected: "number", actual: input },
-                { status: "failure", expected: "undefined", actual: input }
+                { status: "failure", expected: "undefined", actual: input },
               ],
-              actual: input
+              actual: input,
             });
           }
         )
@@ -662,7 +662,7 @@ describe("cast", () => {
           expect(castGender(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -681,7 +681,7 @@ describe("cast", () => {
               status: "failure",
               expected: "enumeration",
               values: new Set(["male", "female"]),
-              actual: input
+              actual: input,
             });
           }
         )
@@ -704,7 +704,7 @@ describe("cast", () => {
             expect(castFooBar(input)).toStrictEqual({
               status: "success",
               value: { foo },
-              values: [{ bar }]
+              values: [{ bar }],
             });
           }
         )
@@ -718,7 +718,7 @@ describe("cast", () => {
           expect(castFooBar(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -731,7 +731,7 @@ describe("cast", () => {
           expect(castFooBar(input)).toStrictEqual({
             status: "success",
             value: input,
-            values: []
+            values: [],
           });
         })
       );
@@ -752,10 +752,10 @@ describe("cast", () => {
                   foo: {
                     status: "failure",
                     expected: "string",
-                    actual: undefined
-                  }
+                    actual: undefined,
+                  },
                 },
-                actual: input
+                actual: input,
               },
               {
                 status: "failure",
@@ -764,13 +764,13 @@ describe("cast", () => {
                   bar: {
                     status: "failure",
                     expected: "number",
-                    actual: undefined
-                  }
+                    actual: undefined,
+                  },
                 },
-                actual: input
-              }
+                actual: input,
+              },
             ],
-            actual: input
+            actual: input,
           });
         })
       );
@@ -792,7 +792,7 @@ describe("cast", () => {
             expect(castFooBar(input)).toStrictEqual({
               status: "success",
               value: [{ foo }, { bar }],
-              values: []
+              values: [],
             });
           }
         )
@@ -814,10 +814,10 @@ describe("cast", () => {
                   foo: {
                     status: "failure",
                     expected: "string",
-                    actual: undefined
-                  }
+                    actual: undefined,
+                  },
                 },
-                actual: input
+                actual: input,
               },
               {
                 status: "failure",
@@ -826,12 +826,12 @@ describe("cast", () => {
                   bar: {
                     status: "failure",
                     expected: "number",
-                    actual: undefined
-                  }
+                    actual: undefined,
+                  },
                 },
-                actual: input
-              }
-            ]
+                actual: input,
+              },
+            ],
           });
         })
       );
@@ -849,7 +849,7 @@ describe("cast", () => {
           expect(castAnswer(input)).toStrictEqual({
             status: "success",
             value: answer,
-            values: []
+            values: [],
           });
         })
       );
@@ -866,7 +866,7 @@ describe("cast", () => {
           expect(castLength(input)).toStrictEqual({
             status: "success",
             value: input.length,
-            values: []
+            values: [],
           });
         })
       );
@@ -881,7 +881,7 @@ describe("cast", () => {
             expect(castLength(input)).toStrictEqual({
               status: "failure",
               expected: "string",
-              actual: input
+              actual: input,
             });
           }
         )
@@ -908,13 +908,13 @@ describe("cast", () => {
         fc.property(
           fc.letrec<{ list: List<number>; cons: Cons<number> }>((tie) => ({
             list: fc.option(tie("cons")),
-            cons: fc.record({ head: fc.double(), tail: tie("list") })
+            cons: fc.record({ head: fc.double(), tail: tie("list") }),
           })).list,
           (input) => {
             expect(castNums(input)).toStrictEqual({
               status: "success",
               value: input,
-              values: []
+              values: [],
             });
           }
         )
@@ -941,16 +941,16 @@ describe("cast", () => {
                     expected: "union",
                     variants: [
                       { status: "failure", expected: "object", actual: tail },
-                      { status: "failure", expected: "null", actual: tail }
+                      { status: "failure", expected: "null", actual: tail },
                     ],
-                    actual: tail
-                  }
+                    actual: tail,
+                  },
                 },
-                actual: input
+                actual: input,
               },
-              { status: "failure", expected: "null", actual: input }
+              { status: "failure", expected: "null", actual: input },
             ],
-            actual: input
+            actual: input,
           });
         })
       );

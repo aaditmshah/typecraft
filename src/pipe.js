@@ -29,5 +29,5 @@ export {
   reverse as backwards,
   reverse,
   feed,
-  apply
+  apply,
 };
