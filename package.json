@@ -74,12 +74,13 @@
   "types": "dist/index.d.ts",
   "repository": "github:aaditmshah/typecraft",
   "scripts": {
+    "clean": "git clean -fdx",
     "lint": "eslint .",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "parcel build --no-source-maps && cp src/*.d.ts dist",
+    "build": "rm -rf .parcel-cache dist && parcel build --no-source-maps && cp src/*.d.ts dist",
     "ci": "concurrently --kill-others-on-fail 'yarn prettier:check' 'yarn lint' 'yarn typecheck' 'yarn test' 'yarn build'",
     "prepare": "is-ci || husky install"
   },
