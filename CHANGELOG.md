@@ -1,3 +1,9 @@
+# [v1.2.0-alpha.3](https://github.com/aaditmshah/typecraft/compare/v1.2.0-alpha.2...v1.2.0-alpha.3) (2022-09-23)
+
+## 🔒 Security Issues
+
+- [`8d4b850`](https://github.com/aaditmshah/typecraft/commit/8d4b850) Upgrade semantic-release-gitmoji fixes #24. (Issues: [`#24`](https://github.com/aaditmshah/typecraft/issues/24))
+
 # [v1.2.0-alpha.2](https://github.com/aaditmshah/typecraft/compare/v1.2.0-alpha.1...v1.2.0-alpha.2) (2022-09-19)
 
 ## 🐛 Bug Fixes
