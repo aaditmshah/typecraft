@@ -84,7 +84,9 @@
     "prettier:write": "prettier --write .",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "rm -rf .parcel-cache dist && parcel build --no-source-maps && cp src/*.d.ts dist",
+    "prebuild": "rm -rf .parcel-cache dist",
+    "build": "parcel build --no-source-maps",
+    "postbuild": "cp src/*.d.ts dist",
     "ci": "concurrently --kill-others-on-fail 'yarn prettier:check' 'yarn lint' 'yarn typecheck' 'yarn test' 'yarn build'",
     "prepare": "is-ci || husky install"
   },
