@@ -9212,6 +9212,11 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
+type-aligned@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/type-aligned/-/type-aligned-1.0.0.tgz#ac2eba0167960232325fbb1c04e176242a98a29e"
+  integrity sha512-YUkgsNZ2TXlMGaExfmVfEBxB9Fji4CH15jXt7smtygwMvzCck82MlUBd4k67L4iXfmDwJ9wdpOxoozrpxoXaVg==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"
