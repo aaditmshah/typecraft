@@ -1,4 +1,4 @@
-import { apply } from "./pipe";
+import { apply } from "type-aligned";
 
 const nondet = (arrays) => {
   if (arrays.length === 0) return [[]];
