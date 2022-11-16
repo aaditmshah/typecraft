@@ -34,14 +34,13 @@ const map = (morphism, type) => ({
   ...type,
   composition: compose(morphism, type.composition),
 });
-const fix = (combinator) => {
-  const type = combinator({
-    tag: "lazy",
-    getType: () => type,
-    composition: id(),
-  });
-  return type;
-};
+const fix = (combinators) =>
+  Object.fromEntries(
+    Object.keys(combinators).map((key) => [
+      key,
+      { tag: "fix", combinators, key, composition: id() },
+    ])
+  );
 
 export {
   unknown,

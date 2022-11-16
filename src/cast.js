@@ -1,4 +1,5 @@
 import { apply } from "type-aligned";
+import { fix } from "./types";
 
 const nondet = (arrays) => {
   if (arrays.length === 0) return [[]];
@@ -204,8 +205,10 @@ const cast = (inputType) => {
         values: [],
       });
     }
-    case "lazy": {
-      const type = inputType.getType();
+    case "fix": {
+      const { combinators, key } = inputType;
+      const fixed = fix(combinators);
+      const type = combinators[key](fixed);
       return (actual) => {
         const result = cast(type)(actual);
         if (result.status !== "success") return result;
