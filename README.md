@@ -1,6 +1,6 @@
 # Typecraft
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/aaditmshah/typecraft/Continuous%20Deployment?logo=github)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/aaditmshah/typecraft/continuous-deployment.yml?branch=main&logo=github)
 [![GitHub license](https://img.shields.io/github/license/aaditmshah/typecraft)](https://github.com/aaditmshah/typecraft/blob/main/LICENSE)
 ![npm](https://img.shields.io/npm/v/typecraft?logo=npm)
 [![semantic-release: gitmoji](https://img.shields.io/badge/semantic--release-gitmoji-E10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
