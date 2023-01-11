@@ -897,10 +897,13 @@ describe("cast", () => {
       tail: List<A>;
     }
 
-    const list = <A>(type: Type<A>) =>
-      fix<List<A>>((tail) => nullable(object({ head: type, tail })));
+    const list = <A>(head: Type<A>) =>
+      fix<{ list: List<A>; cons: Cons<A> }>({
+        list: ({ cons }) => nullable(cons),
+        cons: ({ list: tail }) => object({ head, tail }),
+      });
 
-    const castNums = cast(list(number));
+    const castNums = cast(list(number).list);
 
     it("should successfully cast recursive data structures", () => {
       expect.assertions(100);

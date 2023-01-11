@@ -415,7 +415,11 @@ The `map` type combinator transforms the result of another type combinator.
 ### `fix`
 
 ```typescript
-declare const fix: <A>(combinator: (type: Type<A>) => Type<A>) => Type<A>;
+declare type Combinators<A> = {
+  [T in keyof A]: (propTypes: Types<A>) => Type<A[T]>;
+};
+
+declare const fix: <A extends {}>(combinators: Combinators<A>) => Types<A>;
 ```
 
 ```typescript
@@ -430,10 +434,13 @@ interface Cons<A> {
 }
 
 const list = <A>(head: Type<A>) =>
-  fix<List<A>>((tail) => nullable(object({ head, tail })));
+  fix<{ list: List<A>; cons: Cons<A> }>({
+    list: ({ cons }) => nullable(cons),
+    cons: ({ list: tail }) => object({ head, tail }),
+  });
 ```
 
-The `fix` type combinator describes recursive types. It takes a single type endomorphism as an input and ties the knot to create a cyclic type.
+The `fix` type combinator describes recursive types. It takes an object of mutually recursive combinators as an input and ties the knot to create a cyclic type.
 
 ### `cast`
 
