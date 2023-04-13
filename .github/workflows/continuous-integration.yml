@@ -12,10 +12,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm i --frozen-lockfile
 
       - name: Run checks
-        run: yarn ci
+        run: pnpm ci
