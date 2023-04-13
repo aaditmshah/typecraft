@@ -20,6 +20,10 @@ declare type Types<A> = {
 
 declare type Typedef<A> = A extends Type<infer T> ? T : never;
 
+declare type Combinators<A> = {
+  [T in keyof A]: (propTypes: Types<A>) => Type<A[T]>;
+};
+
 declare const unknown: Type<unknown>;
 declare const never: Type<never>;
 declare const primitive: <A extends keyof Primitives>(
@@ -47,9 +51,9 @@ declare const intersection: <A extends unknown[]>(
 ) => Type<A>;
 declare const pure: <A>(value: A) => Type<A>;
 declare const map: <A, B>(morphism: (a: A) => B, type: Type<A>) => Type<B>;
-declare const fix: <A>(combinator: (type: Type<A>) => Type<A>) => Type<A>;
+declare const fix: <A extends {}>(combinators: Combinators<A>) => Types<A>;
 
-export type { Primitives, Primitive, Type, Types, Typedef };
+export type { Primitives, Primitive, Type, Types, Typedef, Combinators };
 export {
   unknown,
   never,
